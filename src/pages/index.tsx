@@ -1,40 +1,70 @@
-import MovieItem from "@/components/MovieItem/movie-item";
+import { useEffect, useState } from "react";
+import Loading from "@/components/Loading/loading"
+import MovieItem from "@/components/MovieItem/movie-item"
 import MovieItemParams from "@/types/Movie/movie-item-params"
-import "@/styles/home/home.css" 
+import "@/styles/home/home.css"
+import HttpRequest from "@/services/HttpRequest"
 
 function Home() {
-    const movieList: MovieItemParams[] = [
-        {
-            movieImageSrc: "https://i.ebayimg.com/images/g/C9QAAOSwoTlgSnpq/s-l1200.png",
-            movieTitle: "Jaws",
-            movieYear: "1975"
-        },
-        {
-            movieImageSrc: "https://m.media-amazon.com/images/I/81UOBSDQh0L._AC_UF894,1000_QL80_.jpg",
-            movieTitle: "Indiana Jones: Raiders of the Lost Ark",
-            movieYear: "1981"
-        },
-        {
-            movieImageSrc: "https://www.grapheine.com/wp-content/uploads/2019/11/affiche-jurassic-park-800x1183.jpg",
-            movieTitle: "Jurassic Park",
-            movieYear: "1993"
-        },
-        {
-            movieImageSrc: "https://alternativemovieposters.com/wp-content/uploads/2023/07/Dave-Merrell_PulpFiction.jpg",
-            movieTitle: "Pulp Fiction: Tempo de Violência",
-            movieYear: "1994"
-        },
-        {
-            movieImageSrc: "https://m.media-amazon.com/images/M/MV5BMzdmYmUzYjAtMmJhNi00NGU3LWJiODYtM2I5MGFhZjBhM2NhXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",
-            movieTitle: "Godzilla",
-            movieYear: "1998"
-        },
-    ]
+    const [isLoading, setIsLoading] = useState<boolean>(true)
+    const [movieList, setMovieList] = useState<MovieItemParams[]>([])
+
+    function formatResponse(list: []): MovieItemParams[] {
+        return list.map(item => ({
+            movieTitle: item["title"],
+            movieYear: item["release_date"],
+            movieImageSrc: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRoWcWg0E8pSjBNi0TtiZsqu8uD2PAr_K11DA&s" // key: poster_path
+        }));
+    }
+
+    function getApiKey(): string {
+        return process.env.NEXT_PUBLIC_MOVIE_API_KEY!
+    }
+
+    useEffect(() => {
+        async function getMovies() {
+            const url = 'https://api.themoviedb.org/3/discover/movie?language=en-US&page=1&sort_by=popularity.desc'
+
+            try {
+                setIsLoading(true)
+
+                const options = {
+                    headers: {
+                        Authorization: `Bearer ${getApiKey()}`,
+                        Accept: 'application/json',
+                    },
+                }
+
+                const res = await HttpRequest.get(url, options)
+                console.log(res['results'])
+                const formatedRes = formatResponse(res['results'])
+
+                setMovieList(formatedRes)
+            } catch (error) {
+                console.log(error)
+            } finally {
+                setIsLoading(false)
+            }
+        }
+
+        getMovies()
+    }, [])
+
     const movieListItems = movieList.map((movie, index) => (
         <div className='content-grid-item shadow-lg' key={`key-movie-${index}`}>
             <MovieItem movieImageSrc={movie.movieImageSrc} movieTitle={movie.movieTitle} movieYear={movie.movieYear} />
         </div>
     ))
+
+    if (isLoading) {
+        return (
+            <div className='body'>
+                <div className='content'>
+                    <Loading />
+                </div>
+            </div>
+        )
+    }
 
     return (
         <div className='body'>
