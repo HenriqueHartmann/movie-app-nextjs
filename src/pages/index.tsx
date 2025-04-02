@@ -36,7 +36,6 @@ function Home() {
                 }
 
                 const res = await HttpRequest.get(url, options)
-                console.log(res['results'])
                 const formatedRes = formatResponse(res['results'])
 
                 setMovieList(formatedRes)
