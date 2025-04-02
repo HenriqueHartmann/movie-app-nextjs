@@ -1,20 +1,21 @@
 import { useEffect, useState } from "react"
-import HttpRequest from "@/services/HttpRequest"
-import Loading from "@/components/Loading/loading"
-import HttpError from "@/components/Error/http-error"
 import Alert from "@/components/Alert/alert"
+import HttpError from "@/components/Error/http-error"
+import Loading from "@/components/Loading/loading"
 import MovieItem from "@/components/MovieItem/movie-item"
+import FormatDate from "@/services/Date/FormatDate"
+import HttpRequest from "@/services/HttpRequest"
+import HttpErrorComponentParams from "@/types/Error/http-error-component-params"
 import MovieItemParams from "@/types/Movie/movie-item-params"
 import "@/styles/home/home.css"
-import HttpErrorComponentParams from "@/types/Error/http-error-component-params"
 
 function Home() {
     const [isLoading, setIsLoading] = useState<boolean>(true)
     const [showAlert, setShowAlert] = useState<boolean>(false)
-    const [movieList, setMovieList] = useState<MovieItemParams[]>([])
+    const [alertMessage, setAlertMessage] = useState<string>("Something went wrong!")
     const [hasError, setHasError] = useState<boolean>(false);
     const [errorData, setErrorData] = useState<HttpErrorComponentParams | null>(null)
-    const [alertMessage, setAlertMessage] = useState<string>("Something went wrong!")
+    const [movieList, setMovieList] = useState<MovieItemParams[]>([])
 
     useEffect(() => {
         function getApiKey(): string {
@@ -34,8 +35,8 @@ function Home() {
         function setFormatResponse(list: []): void {
             const formattedList = list.map(item => ({
                 movieTitle: item["title"],
-                movieYear: item["release_date"],
-                movieImageSrc: getPosterPath(item["poster_path"]) // key: poster_path
+                movieReleaseDate: FormatDate.exec(item["release_date"]),
+                movieImageSrc: getPosterPath(item["poster_path"])
             }));
 
             setMovieList(formattedList)
@@ -93,7 +94,7 @@ function Home() {
 
     const movieListItems = movieList.map((movie, index) => (
         <div className='content-grid-item shadow-lg' key={`key-movie-${index}`}>
-            <MovieItem movieImageSrc={movie.movieImageSrc} movieTitle={movie.movieTitle} movieYear={movie.movieYear} />
+            <MovieItem movieImageSrc={movie.movieImageSrc} movieTitle={movie.movieTitle} movieReleaseDate={movie.movieReleaseDate} />
         </div>
     ))
 
