@@ -11,10 +11,10 @@ import "@/styles/home/home.css"
 
 function Home() {
     const [isLoading, setIsLoading] = useState<boolean>(true)
-    const [showAlert, setShowAlert] = useState<boolean>(false)
-    const [alertMessage, setAlertMessage] = useState<string>("Something went wrong!")
     const [hasError, setHasError] = useState<boolean>(false);
     const [errorData, setErrorData] = useState<HttpErrorComponentParams | null>(null)
+    const [showAlert, setShowAlert] = useState<boolean>(false)
+    const [alertMessage, setAlertMessage] = useState<string>("Something went wrong!")
     const [movieList, setMovieList] = useState<MovieItemParams[]>([])
 
     useEffect(() => {
@@ -52,9 +52,9 @@ function Home() {
         async function getMovies() {
             try {
                 setIsLoading(true)
-                setMovieList([])
                 setHasError(false)
                 setErrorData(null)
+                setMovieList([])
 
                 const url = 'https://api.themoviedb.org/3/discover/movie?language=en-US&page=1&sort_by=popularity.desc'
                 const options = {
@@ -80,7 +80,7 @@ function Home() {
                     status: error.status,
                     title: error.message,
                     message: message,
-                    onClickCallback: showAlertComponent,
+                    onClickCallback: getMovies,
                 })
                 setHasError(true)
                 showAlertComponent()
