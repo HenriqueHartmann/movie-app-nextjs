@@ -1,6 +1,8 @@
 import MovieItemParams from "@/types/Movie/movie-item-params"
 
-function MovieItem({ movieImageSrc, movieTitle, movieYear }: MovieItemParams) {
+function MovieItem({ movieImageSrc, movieTitle, movieReleaseDate }: MovieItemParams) {
+    const fMovieDate = movieReleaseDate
+
     return (
         <div className="movie-card">
             <div className='movie-image'>
@@ -12,7 +14,7 @@ function MovieItem({ movieImageSrc, movieTitle, movieYear }: MovieItemParams) {
                 <span>{movieTitle}</span>
             </div>
             <div className='movie-year'>
-                <span>{movieYear}</span>
+                <span>{fMovieDate}</span>
             </div>
         </div>
     )
