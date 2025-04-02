@@ -4,7 +4,18 @@ class HttpRequest {
             const response = await fetch(url, options)
 
             if (!response.ok) {
-                throw new Error(`Request error: ${response.status}`)
+                let errorBody;
+                try {
+                    errorBody = await response.json(); // Try parsing JSON
+                } catch {
+                    errorBody = await response.text(); // Fallback to text if JSON fails
+                }
+
+                throw {
+                    message: `Request error: ${response.status}`,
+                    status: response.status,
+                    body: errorBody
+                };
             }
     
             const data = await response.json()
