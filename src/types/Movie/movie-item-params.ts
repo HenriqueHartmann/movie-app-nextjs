@@ -1,7 +1,7 @@
 type MovieItemParams = {
     movieImageSrc: string,
     movieTitle: string,
-    movieYear: string,
+    movieReleaseDate: string,
 }
 
 export default MovieItemParams
