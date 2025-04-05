@@ -1,12 +1,22 @@
 import { useEffect, useState } from "react"
+
+// Components
 import Alert from "@/components/Alert/alert"
 import HttpError from "@/components/Error/http-error"
 import Loading from "@/components/Loading/loading"
 import MovieItem from "@/components/MovieItem/movie-item"
+import Pagination from "@/components/Pagination/pagination"
+
+// Services
 import FormatDate from "@/services/date/FormatDate"
 import HttpRequest from "@/services/request/HttpRequest"
+
+// Types
 import HttpErrorComponentParams from "@/types/Error/http-error-component-params"
 import MovieItemParams from "@/types/Movie/movie-item-params"
+import PaginationData from "@/types/Pagination/pagination-data"
+
+// Styles
 import "@/pages/home/home.css"
 
 function Home() {
@@ -16,6 +26,7 @@ function Home() {
     const [showAlert, setShowAlert] = useState<boolean>(false)
     const [alertMessage, setAlertMessage] = useState<string>("Something went wrong!")
     const [movieList, setMovieList] = useState<MovieItemParams[]>([])
+    const [paginationData, setPaginationData] = useState<PaginationData | null>(null)
 
     useEffect(() => {
         function getApiKey(): string {
@@ -32,14 +43,24 @@ function Home() {
             return "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRoWcWg0E8pSjBNi0TtiZsqu8uD2PAr_K11DA&s"
         }
 
-        function setFormatResponse(list: []): void {
-            const formattedList = list.map(item => ({
+        function setResponseResultsToMovieList(list: []): void {
+            const data = list.map(item => ({
                 movieTitle: item["title"],
                 movieReleaseDate: FormatDate.exec(item["release_date"]),
                 movieImageSrc: getPosterPath(item["poster_path"])
             }));
 
-            setMovieList(formattedList)
+            setMovieList(data)
+        }
+
+        function setResponseToPaginationData(response: any): void {
+            const data = {
+                page: response['page'],
+                totalPages: response['total_pages'],
+                totalResults: response['total_results']
+            }
+
+            setPaginationData(data)
         }
 
         function showAlertComponent(): void {
@@ -67,7 +88,9 @@ function Home() {
                 await new Promise(resolve => setTimeout(resolve, 2000))
 
                 const res = await HttpRequest.get(url, options)
-                setFormatResponse(res['results'])
+                
+                setResponseToPaginationData(res)
+                setResponseResultsToMovieList(res['results'])
             } catch (error: any) {
                 let message = "Something went wrong!"
 
@@ -112,7 +135,10 @@ function Home() {
                         onClickCallback={errorData.onClickCallback}
                     />
                 ) : (
-                    <div className="content-grid">{movieListItems}</div>
+                    <div>
+                        <Pagination />
+                        <div className="content-catalog">{movieListItems}</div>
+                    </div>
                 )}
             </div>
         </div>
