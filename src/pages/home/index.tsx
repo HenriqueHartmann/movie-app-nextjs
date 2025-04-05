@@ -115,8 +115,10 @@ function Home() {
         getMovies()
     }, [])
 
+    function onSomething(): void {}
+
     const movieListItems = movieList.map((movie, index) => (
-        <div className='content-grid-item shadow-lg' key={`key-movie-${index}`}>
+        <div key={`key-movie-${index}`} className='content-grid-item shadow-lg'>
             <MovieItem movieImageSrc={movie.movieImageSrc} movieTitle={movie.movieTitle} movieReleaseDate={movie.movieReleaseDate} />
         </div>
     ))
@@ -136,7 +138,13 @@ function Home() {
                     />
                 ) : (
                     <div>
-                        <Pagination />
+                        <Pagination 
+                            currentPage={paginationData!.page}
+                            lastPage={paginationData!.totalPages}
+                            onPrevious={onSomething}
+                            onNext={onSomething}
+                            onSelectPage={onSomething}
+                        />
                         <div className="content-catalog">{movieListItems}</div>
                     </div>
                 )}
