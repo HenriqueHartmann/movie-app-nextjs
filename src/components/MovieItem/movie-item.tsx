@@ -1,4 +1,5 @@
 import MovieItemParams from "@/types/Movie/movie-item-params"
+import "@/components/MovieItem/movie-item.css"
 
 function MovieItem({ movieImageSrc, movieTitle, movieReleaseDate }: MovieItemParams) {
     const fMovieDate = movieReleaseDate

@@ -3,11 +3,11 @@ import Alert from "@/components/Alert/alert"
 import HttpError from "@/components/Error/http-error"
 import Loading from "@/components/Loading/loading"
 import MovieItem from "@/components/MovieItem/movie-item"
-import FormatDate from "@/services/Date/FormatDate"
-import HttpRequest from "@/services/HttpRequest"
+import FormatDate from "@/services/date/FormatDate"
+import HttpRequest from "@/services/request/HttpRequest"
 import HttpErrorComponentParams from "@/types/Error/http-error-component-params"
 import MovieItemParams from "@/types/Movie/movie-item-params"
-import "@/styles/home/home.css"
+import "@/pages/home/home.css"
 
 function Home() {
     const [isLoading, setIsLoading] = useState<boolean>(true)
