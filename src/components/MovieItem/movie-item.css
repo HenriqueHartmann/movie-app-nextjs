@@ -1,3 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&family=Roboto:wght@400;500&display=swap');
+
+:root {
+    --card-bg: #fff;
+    --title-text-light: oklch(.21 .034 264.665);
+    --subtitle-text-light: oklch(.373 .034 259.733);
+}
+
 @media (max-width: 1200px) {
     .movie-card {
         flex: 1 1 calc(33.33% - 1.5rem);
