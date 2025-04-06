@@ -175,6 +175,13 @@ function Home() {
                             onSelectPage={selectPage}
                         />
                         <div className="content-catalog">{getMovieListItems()}</div>
+                        <Pagination
+                            currentPage={paginationData!.page}
+                            lastPage={paginationData!.totalPages}
+                            onNext={nextPage}
+                            onPrevious={previousPage}
+                            onSelectPage={selectPage}
+                        />
                     </div>
                 )}
             </div>
