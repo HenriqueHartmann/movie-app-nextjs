@@ -53,9 +53,11 @@ function Home() {
     }
 
     function setResponseToPaginationData(response: any): void {
+        const totalPages = response['total_pages'] > 500 ? 500 : response['total_pages']
+
         const data = {
             page: response['page'],
-            totalPages: response['total_pages'],
+            totalPages: totalPages,
             totalResults: response['total_results']
         }
 
