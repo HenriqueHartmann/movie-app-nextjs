@@ -15,6 +15,14 @@ function Pagination({
 }) {
     const [isMobile, setIsMobile] = useState(false);
 
+    function isFirstPage(): boolean {
+        return currentPage === 1
+    }
+
+    function isLastPage(): boolean {
+        return currentPage === lastPage
+    }
+
     useEffect(() => {
         const handleResize = () => {
             setIsMobile(window.innerWidth < 800);
@@ -35,8 +43,8 @@ function Pagination({
                 key={`key-movie-page-${page}`}
                 onClick={() => onSelectPage(page)}
                 className={`min-w-[40px] px-2 h-10 flex-shrink-0 rounded border border-gray-400 ${isActive
-                        ? 'bg-gray-200 text-black font-semibold cursor-default'
-                        : 'text-gray-700 bg-white hover:bg-gray-100 transition-colors duration-150 cursor-pointer'
+                    ? 'bg-gray-200 text-black font-semibold cursor-default'
+                    : 'text-gray-700 bg-white hover:bg-gray-100 transition-colors duration-150 cursor-pointer'
                     }`}
             >
                 {page}
@@ -75,8 +83,12 @@ function Pagination({
         <div className="flex justify-center items-center p-4">
             <nav className="flex flex-wrap items-center gap-2 text-gray-800 font-medium">
                 <button
-                    className="w-24 sm:w-28 h-10 rounded-md border border-gray-400 text-gray-700 bg-white hover:bg-gray-100 transition-colors duration-150 flex items-center justify-center px-2 cursor-pointer shrink-0 gap-1"
+                    disabled={isFirstPage()}
                     onClick={onPrevious}
+                    className={`w-24 sm:w-28 h-10 rounded-md border border-gray-400 px-2 flex items-center justify-center shrink-0 gap-1 transition-colors duration-150 ${isFirstPage()
+                            ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                            : 'bg-white text-gray-700 hover:bg-gray-100 cursor-pointer'
+                        }`}
                 >
                     <span className="text-lg">&lt;</span>
                     <span className="text-sm sm:text-base">Previous</span>
@@ -85,8 +97,12 @@ function Pagination({
                 {getPaginationList()}
 
                 <button
-                    className="w-24 sm:w-28 h-10 rounded-md border border-gray-400 text-gray-700 bg-white hover:bg-gray-100 transition-colors duration-150 flex items-center justify-center px-2 cursor-pointer shrink-0 gap-1"
+                    disabled={isLastPage()}
                     onClick={onNext}
+                    className={`w-24 sm:w-28 h-10 rounded-md border border-gray-400 px-2 flex items-center justify-center shrink-0 gap-1 transition-colors duration-150 ${isLastPage()
+                            ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                            : 'bg-white text-gray-700 hover:bg-gray-100 cursor-pointer'
+                        }`}
                 >
                     <span className="text-sm sm:text-base">Next</span>
                     <span className="text-lg">&gt;</span>
