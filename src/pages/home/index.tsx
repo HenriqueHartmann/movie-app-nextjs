@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react"
 
+// Layout
+import MainLayout from "@/layout/main-layout"
+
 // Components
 import Alert from "@/components/Alert/alert"
 import HttpError from "@/components/Error/http-error"
@@ -150,42 +153,44 @@ function Home() {
     }
 
     return (
-        <div className="body">
-            {showAlert ? <Alert
-                message={alertMessage}
-                onClose={() => setShowAlert(false)}
-            /> : null}
-            <div className="content">
-                {isLoading ? (
-                    <Loading />
-                ) : hasError && errorData ? (
-                    <HttpError
-                        status={errorData.status}
-                        title={errorData.title}
-                        message={errorData.message}
-                        onClickCallback={errorData.onClickCallback}
-                    />
-                ) : (
-                    <div>
-                        <Pagination
-                            currentPage={paginationData!.page}
-                            lastPage={paginationData!.totalPages}
-                            onNext={nextPage}
-                            onPrevious={previousPage}
-                            onSelectPage={selectPage}
+        <MainLayout>
+            <div className="body">
+                {showAlert ? <Alert
+                    message={alertMessage}
+                    onClose={() => setShowAlert(false)}
+                /> : null}
+                <div className="content">
+                    {isLoading ? (
+                        <Loading />
+                    ) : hasError && errorData ? (
+                        <HttpError
+                            status={errorData.status}
+                            title={errorData.title}
+                            message={errorData.message}
+                            onClickCallback={errorData.onClickCallback}
                         />
-                        <div className="content-catalog">{getMovieListItems()}</div>
-                        <Pagination
-                            currentPage={paginationData!.page}
-                            lastPage={paginationData!.totalPages}
-                            onNext={nextPage}
-                            onPrevious={previousPage}
-                            onSelectPage={selectPage}
-                        />
-                    </div>
-                )}
+                    ) : (
+                        <div>
+                            <Pagination
+                                currentPage={paginationData!.page}
+                                lastPage={paginationData!.totalPages}
+                                onNext={nextPage}
+                                onPrevious={previousPage}
+                                onSelectPage={selectPage}
+                            />
+                            <div className="content-catalog">{getMovieListItems()}</div>
+                            <Pagination
+                                currentPage={paginationData!.page}
+                                lastPage={paginationData!.totalPages}
+                                onNext={nextPage}
+                                onPrevious={previousPage}
+                                onSelectPage={selectPage}
+                            />
+                        </div>
+                    )}
+                </div>
             </div>
-        </div>
+        </MainLayout>
     )
 }
 
